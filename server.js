@@ -10,8 +10,8 @@ app.get("/proxy", async (req, res) => {
     const response = await fetch(url, {
       headers: {
         "User-Agent": "Mozilla/5.0",
-        "Referer": "https://ais-vidnt.com",
-        "Origin": "https://ais-vidnt.com"
+        "Referer": "https://ballsod24hrs.com",
+        "Origin": "https://ballsod24hrs.com"
       }
     });
 
