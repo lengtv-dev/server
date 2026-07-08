@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS Proxy Player Testing</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: #fff; text-align: center; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        video { width: 100%; max-height: 450px; background: #000; border: 2px solid #333; border-radius: 8px; }
+        .info { margin-top: 15px; font-size: 14px; color: #aaa; text-align: left; background: #1e1e1e; padding: 15px; border-radius: 6px; word-break: break-all; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>HLS Proxy Server Player 🎬</h2>
+    <video id="video" controls autoplay muted></video>
+    
+    <div class="info">
+        <strong>สถานะการทำงาน:</strong>
+        <p id="target">เป้าหมาย: https://godlivetv.io/madoball/1484/playlist.m3u8</p>
+        <p id="proxy-url">กำลังโหลด...</p>
+    </div>
+</div>
+
+<script>
+    const video = document.getElementById('video');
+    const targetStream = "https://godlivetv.io/madoball/1484/playlist.m3u8";
+    
+    /* 💡 คำแนะนำสำหรับการขึ้นคลาวด์:
+      - ถ้ารันบนคอมตัวเอง (Localhost) ให้ปล่อย backendHost เป็นค่าว่าง "" มันจะอิงตาม URL ปัจจุบัน
+      - ถ้าคุณเอาโค้ด backend ไปขึ้น Render.com และแยกหน้าบ้านเว็บนี้ไปไว้ที่ Netlify 
+        ให้แก้ตรงนี้เป็น URL ของ Render เช่น: const backendHost = "https://your-app.onrender.com";
+    */
+    const backendHost = ""; 
+    const proxyStreamUrl = `${backendHost}/proxy?url=${encodeURIComponent(targetStream)}`;
+    
+    document.getElementById('proxy-url').innerText = `วิ่งผ่าน Proxy: ${window.location.origin}${proxyStreamUrl}`;
+
+    // เริ่มทำงานระบบเล่นวิดีโอ
+    if (Hls.isSupported()) {
+        const hls = new Hls({
+            maxBufferSize: 0,         // เคลียร์緩衝เก่าทันที ลดการดีเลย์ภาพช้ากว่าเวลาจริง
+            maxBufferLength: 5,       // โหลดล่วงหน้าไม่เกิน 5 วินาที
+            liveSyncDurationCount: 3   // ซิงค์สตรีมสดให้ไกล้เคียงเวลาจริงที่สุด
+        });
+        hls.loadSource(proxyStreamUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            video.play();
+        });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        // สำหรับ Safari บน iOS / macOS ที่เล่นไฟล์ m3u8 ได้ในตัวโดยไม่ต้องใช้ไลบรารีช่วย
+        video.src = proxyStreamUrl;
+        video.addEventListener('loadedmetadata', function() {
+            video.play();
+        });
+    }
+</script>
+
+</body>
+</html>
