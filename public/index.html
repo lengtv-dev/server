@@ -34,7 +34,7 @@
       - ถ้าคุณเอาโค้ด backend ไปขึ้น Render.com และแยกหน้าบ้านเว็บนี้ไปไว้ที่ Netlify 
         ให้แก้ตรงนี้เป็น URL ของ Render เช่น: const backendHost = "https://your-app.onrender.com";
     */
-    const backendHost = ""; 
+    const backendHost = "https://server-o0cy.onrender.com"; 
     const proxyStreamUrl = `${backendHost}/proxy?url=${encodeURIComponent(targetStream)}`;
     
     document.getElementById('proxy-url').innerText = `วิ่งผ่าน Proxy: ${window.location.origin}${proxyStreamUrl}`;
