@@ -20,8 +20,8 @@ app.get("/proxy", async (req, res) => {
     // กำหนด Headers เพื่อปลอมตัวหลอกระบบตรวจจับของเว็บต้นทาง
     const headers = {
       "User-Agent": Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.140",
-      "Referer": "https://atmflix.live/",
-      "Origin": "https://atmflix.live",
+      "Referer": "https://dooballland.com",
+      "Origin": "https://dooballland.com",
       "Accept": "*/*",
       "Accept-Language": "en-US,en;q=0.9"
     };
